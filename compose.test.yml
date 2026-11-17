@@ -1,0 +1,21 @@
+# Local test only (not used by Railway): docker compose -p her-2463 -f compose.test.yml up -d --build
+services:
+  tianji:
+    build: .
+    labels: [her=2463]
+    environment:
+      DATABASE_URL: postgresql://tianji:tianji-local-test@postgres:5432/tianji
+      JWT_SECRET: local-test-jwt-secret-0123456789abcdef
+      ADMIN_PASSWORD: local-test-admin-pw-123
+    ports: ["42463:12345"]
+    depends_on: [postgres]
+  postgres:
+    image: postgres:17-alpine
+    labels: [her=2463]
+    environment:
+      POSTGRES_DB: tianji
+      POSTGRES_USER: tianji
+      POSTGRES_PASSWORD: tianji-local-test
+    volumes: [pgdata:/var/lib/postgresql/data]
+volumes:
+  pgdata:
